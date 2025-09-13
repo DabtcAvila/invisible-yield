@@ -158,22 +158,44 @@
 
         function deposit() {
             const amount = prompt('Enter deposit amount (USDC):');
-            if (amount) {
-                alert(`✅ Deposited ${amount} USDC successfully!\nYour funds are now earning 32.5% APY.`);
-                location.reload();
+            if (amount && !isNaN(amount)) {
+                baseBalance += parseFloat(amount);
+                alert(`✅ Deposited ${amount} USDC successfully!\nYour funds are now earning 32.5% APY.\nNew balance: $${baseBalance.toFixed(2)}`);
+                // Update display immediately
+                const balanceElement = document.querySelector('.text-green-400');
+                if (balanceElement) {
+                    balanceElement.textContent = '$' + Number(baseBalance).toLocaleString();
+                }
             }
         }
 
         function withdraw() {
             const amount = prompt('Enter withdrawal amount (USDC):');
-            if (amount) {
-                alert(`✅ Withdrawal of ${amount} USDC initiated!\nFunds will arrive in 1-2 minutes.`);
+            if (amount && !isNaN(amount)) {
+                const withdrawAmount = parseFloat(amount);
+                if (withdrawAmount <= baseBalance) {
+                    baseBalance -= withdrawAmount;
+                    alert(`✅ Withdrawal of ${amount} USDC completed!\nNew balance: $${baseBalance.toFixed(2)}`);
+                    // Update display immediately
+                    const balanceElement = document.querySelector('.text-green-400');
+                    if (balanceElement) {
+                        balanceElement.textContent = '$' + Number(baseBalance).toLocaleString();
+                    }
+                } else {
+                    alert('❌ Insufficient balance!');
+                }
             }
         }
 
         function compound() {
-            alert('✅ Yield compounded successfully!\nEarned: $28.47\nNew balance: $10,875.79');
-            location.reload();
+            const earned = (baseBalance * 0.001).toFixed(2); // 0.1% compound
+            baseBalance = baseBalance * 1.001;
+            alert(`✅ Yield compounded successfully!\nEarned: $${earned}\nNew balance: $${baseBalance.toFixed(2)}`);
+            // Update display immediately
+            const balanceElement = document.querySelector('.text-green-400');
+            if (balanceElement) {
+                balanceElement.textContent = '$' + Number(baseBalance).toLocaleString();
+            }
         }
 
         function disconnect() {
@@ -182,13 +204,15 @@
             }
         }
 
-        // Auto-update stats
+        // Auto-update stats (visual effect only - not cumulative)
+        let baseBalance = 10847.32;
         setInterval(() => {
-            const balance = document.querySelector('.text-green-400');
-            if (balance) {
-                const current = parseFloat(balance.textContent.replace('$', '').replace(',', ''));
-                const newBalance = (current + Math.random() * 0.1).toFixed(2);
-                balance.textContent = '$' + Number(newBalance).toLocaleString();
+            const balanceElement = document.querySelector('.text-green-400');
+            if (balanceElement && balanceElement.textContent.includes('$')) {
+                // Small random fluctuation around base balance (±0.5%)
+                const fluctuation = (Math.random() - 0.5) * 0.01 * baseBalance;
+                const displayBalance = (baseBalance + fluctuation).toFixed(2);
+                balanceElement.textContent = '$' + Number(displayBalance).toLocaleString();
             }
         }, 5000);
     </script>
