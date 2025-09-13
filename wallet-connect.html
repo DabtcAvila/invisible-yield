@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invisible Yield - Connect Wallet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/get-starknet/dist/index.global.js"></script>
+</head>
+<body class="bg-black text-white">
+    <div class="min-h-screen bg-gradient-to-b from-black via-green-950 to-black flex items-center justify-center">
+        <div class="max-w-md w-full p-8">
+            <h1 class="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                Connect Your Wallet
+            </h1>
+            
+            <div class="space-y-4">
+                <button onclick="connectArgent()" class="w-full p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-semibold hover:scale-105 transition">
+                    🔷 Connect with Argent X
+                </button>
+                
+                <button onclick="connectBraavos()" class="w-full p-4 bg-gradient-to-r from-orange-600 to-red-600 rounded-lg font-semibold hover:scale-105 transition">
+                    🦁 Connect with Braavos
+                </button>
+                
+                <button onclick="connectChipiPay()" class="w-full p-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg font-semibold hover:scale-105 transition">
+                    💳 Connect with ChipiPay
+                </button>
+            </div>
+            
+            <div id="walletInfo" class="mt-8 p-4 bg-black/50 rounded-lg hidden">
+                <p class="text-sm text-gray-400">Connected:</p>
+                <p id="address" class="font-mono text-green-400 text-xs"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function connectArgent() {
+            try {
+                const starknet = await window.starknet.enable();
+                if (starknet) {
+                    showWallet(starknet.selectedAddress);
+                }
+            } catch (error) {
+                alert('Please install Argent X wallet');
+            }
+        }
+        
+        async function connectBraavos() {
+            try {
+                const starknet = await window.starknet_braavos.enable();
+                if (starknet) {
+                    showWallet(starknet.selectedAddress);
+                }
+            } catch (error) {
+                alert('Please install Braavos wallet');
+            }
+        }
+        
+        function connectChipiPay() {
+            alert('ChipiPay integration coming soon! Use demo mode for now.');
+            // Simulate connection
+            showWallet('0x1234...demo');
+        }
+        
+        function showWallet(address) {
+            document.getElementById('walletInfo').classList.remove('hidden');
+            document.getElementById('address').textContent = address;
+        }
+    </script>
+</body>
+</html>

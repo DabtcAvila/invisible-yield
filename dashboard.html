@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invisible Yield - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-black text-white">
+    <div class="min-h-screen bg-gradient-to-b from-black via-green-950 to-black">
+        <!-- Header -->
+        <header class="bg-black/80 backdrop-blur-lg border-b border-emerald-900/30 p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                    Invisible Yield Dashboard
+                </h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-400">Connected:</span>
+                    <span class="font-mono text-xs text-green-400">0x1234...demo</span>
+                    <button onclick="disconnect()" class="px-4 py-2 bg-red-600/20 border border-red-600 rounded-lg hover:bg-red-600/30">
+                        Disconnect
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="container mx-auto p-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-black/50 backdrop-blur border border-emerald-900/30 rounded-xl p-6">
+                    <p class="text-gray-400 text-sm mb-2">Your Balance</p>
+                    <p class="text-3xl font-bold text-green-400">$10,847.32</p>
+                    <p class="text-xs text-green-500 mt-2">+12.5% this month</p>
+                </div>
+                <div class="bg-black/50 backdrop-blur border border-emerald-900/30 rounded-xl p-6">
+                    <p class="text-gray-400 text-sm mb-2">Current APY</p>
+                    <p class="text-3xl font-bold text-emerald-400">32.5%</p>
+                    <p class="text-xs text-gray-500 mt-2">Auto-compounding</p>
+                </div>
+                <div class="bg-black/50 backdrop-blur border border-emerald-900/30 rounded-xl p-6">
+                    <p class="text-gray-400 text-sm mb-2">Total Earned</p>
+                    <p class="text-3xl font-bold text-blue-400">$2,847.32</p>
+                    <p class="text-xs text-gray-500 mt-2">Since deposit</p>
+                </div>
+                <div class="bg-black/50 backdrop-blur border border-emerald-900/30 rounded-xl p-6">
+                    <p class="text-gray-400 text-sm mb-2">Next Compound</p>
+                    <p class="text-3xl font-bold text-yellow-400">2h 34m</p>
+                    <p class="text-xs text-gray-500 mt-2">Automatic</p>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <button onclick="deposit()" class="p-6 bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl font-bold text-lg hover:scale-105 transition">
+                    💰 Deposit
+                </button>
+                <button onclick="withdraw()" class="p-6 bg-black/50 border-2 border-emerald-500 rounded-xl font-bold text-lg hover:bg-emerald-950/30 transition">
+                    💸 Withdraw
+                </button>
+                <button onclick="compound()" class="p-6 bg-black/50 border-2 border-blue-500 rounded-xl font-bold text-lg hover:bg-blue-950/30 transition">
+                    🔄 Compound Now
+                </button>
+            </div>
+
+            <!-- Chart -->
+            <div class="bg-black/50 backdrop-blur border border-emerald-900/30 rounded-xl p-6 mb-8">
+                <h2 class="text-xl font-bold mb-4">Portfolio Growth</h2>
+                <canvas id="growthChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Yield Strategies -->
+            <div class="bg-black/50 backdrop-blur border border-emerald-900/30 rounded-xl p-6">
+                <h2 class="text-xl font-bold mb-4">Active Yield Strategies</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center p-4 bg-black/30 rounded-lg">
+                        <div>
+                            <p class="font-semibold">StarkNet USDC Vault</p>
+                            <p class="text-sm text-gray-400">Low Risk • Auto-compound</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-green-400 font-bold">28.5% APY</p>
+                            <p class="text-sm text-gray-400">40% allocation</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-black/30 rounded-lg">
+                        <div>
+                            <p class="font-semibold">ETH Yield Optimizer</p>
+                            <p class="text-sm text-gray-400">Medium Risk • Weekly rebalance</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-emerald-400 font-bold">35.2% APY</p>
+                            <p class="text-sm text-gray-400">35% allocation</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center p-4 bg-black/30 rounded-lg">
+                        <div>
+                            <p class="font-semibold">STRK Liquidity Mining</p>
+                            <p class="text-sm text-gray-400">High Risk • Daily harvest</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-yellow-400 font-bold">45.8% APY</p>
+                            <p class="text-sm text-gray-400">25% allocation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Chart
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Portfolio Value',
+                    data: [8000, 8500, 9200, 9800, 10200, 10847],
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            callback: function(value) {
+                                return '$' + value;
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)'
+                        }
+                    }
+                }
+            }
+        });
+
+        function deposit() {
+            const amount = prompt('Enter deposit amount (USDC):');
+            if (amount) {
+                alert(`✅ Deposited ${amount} USDC successfully!\nYour funds are now earning 32.5% APY.`);
+                location.reload();
+            }
+        }
+
+        function withdraw() {
+            const amount = prompt('Enter withdrawal amount (USDC):');
+            if (amount) {
+                alert(`✅ Withdrawal of ${amount} USDC initiated!\nFunds will arrive in 1-2 minutes.`);
+            }
+        }
+
+        function compound() {
+            alert('✅ Yield compounded successfully!\nEarned: $28.47\nNew balance: $10,875.79');
+            location.reload();
+        }
+
+        function disconnect() {
+            if (confirm('Are you sure you want to disconnect?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Auto-update stats
+        setInterval(() => {
+            const balance = document.querySelector('.text-green-400');
+            if (balance) {
+                const current = parseFloat(balance.textContent.replace('$', '').replace(',', ''));
+                const newBalance = (current + Math.random() * 0.1).toFixed(2);
+                balance.textContent = '$' + Number(newBalance).toLocaleString();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
