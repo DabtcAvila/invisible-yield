@@ -1,0 +1,36 @@
+{
+  "name": "InvisibleYield - Bitcoin Yield App",
+  "short_name": "InvisibleYield",
+  "description": "The first crypto app where you never see wallets, gas, or seed phrases",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#EAB308",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["finance", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Send Money",
+      "url": "/send",
+      "description": "Send Bitcoin instantly"
+    },
+    {
+      "name": "View Yield",
+      "url": "/dashboard",
+      "description": "Check your yield earnings"
+    }
+  ]
+}
