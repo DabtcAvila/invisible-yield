@@ -66,7 +66,9 @@
             <!-- Chart -->
             <div class="bg-black/50 backdrop-blur border border-emerald-900/30 rounded-xl p-6 mb-8">
                 <h2 class="text-xl font-bold mb-4">Portfolio Growth</h2>
-                <canvas id="growthChart" width="400" height="200"></canvas>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="growthChart"></canvas>
+                </div>
             </div>
 
             <!-- Yield Strategies -->
@@ -109,52 +111,73 @@
     </div>
 
     <script>
-        // Initialize Chart
-        const ctx = document.getElementById('growthChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Portfolio Value',
-                    data: [8000, 8500, 9200, 9800, 10200, 10847],
-                    borderColor: 'rgb(34, 197, 94)',
-                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
+        // Initialize Chart ONCE
+        let chartInstance = null;
+        const chartData = [8000, 8500, 9200, 9800, 10200, 10847];
+        
+        function initChart() {
+            // Destroy existing chart if it exists
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+            
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: [...chartData], // Use a copy of the data
+                        borderColor: 'rgb(34, 197, 94)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: false,
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        },
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.5)',
-                            callback: function(value) {
-                                return '$' + value;
-                            }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 0 // Disable animations to prevent continuous updates
+                    },
+                    interaction: {
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
                         }
                     },
-                    x: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 7000,
+                            max: 12000,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.5)',
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
                         },
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.5)'
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.5)'
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
+        
+        // Initialize chart on page load
+        initChart();
 
         function deposit() {
             const amount = prompt('Enter deposit amount (USDC):');
@@ -195,6 +218,17 @@
             const balanceElement = document.querySelector('.text-green-400');
             if (balanceElement) {
                 balanceElement.textContent = '$' + Number(baseBalance).toLocaleString();
+            }
+            // Update chart with new value (add July with new balance)
+            if (chartInstance) {
+                chartInstance.data.labels.push('Jul');
+                chartInstance.data.datasets[0].data.push(Math.round(baseBalance));
+                // Keep only last 6 months
+                if (chartInstance.data.labels.length > 6) {
+                    chartInstance.data.labels.shift();
+                    chartInstance.data.datasets[0].data.shift();
+                }
+                chartInstance.update('none'); // Update without animation
             }
         }
 
