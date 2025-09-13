@@ -43,16 +43,16 @@ export default function LandingPage() {
             whileHover={{ scale: 1.05 }}
           >
             <Zap className="w-4 h-4" />
-            <span className="text-sm font-medium">Lightning Fast Bitcoin Yield</span>
+            <span className="text-sm font-medium">Powered by StarkNet & ChipiPay</span>
           </motion.div>
 
           <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-            Your Money.<br />Working 24/7.
+            Invisible Yield<br />Your DeFi Autopilot.
           </h1>
 
           <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
-            The first crypto app where you never see wallets, gas, or seed phrases. 
-            Just email login, instant payments, and automatic Bitcoin yield.
+            The smartest yield farming protocol on StarkNet. 
+            Connect with ChipiPay, deposit, and watch your portfolio grow automatically.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
@@ -63,8 +63,8 @@ export default function LandingPage() {
               <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4">
                 <TrendingUp className="w-6 h-6 text-yellow-500" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">12.5% APY</h3>
-              <p className="text-gray-400 text-sm">Automatic yield optimization across DeFi protocols</p>
+              <h3 className="text-lg font-semibold mb-2">25% APY Average</h3>
+              <p className="text-gray-400 text-sm">AI-optimized strategies across StarkNet DeFi</p>
             </motion.div>
 
             <motion.div 
@@ -74,8 +74,8 @@ export default function LandingPage() {
               <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
                 <Zap className="w-6 h-6 text-blue-500" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Instant Payments</h3>
-              <p className="text-gray-400 text-sm">Lightning Network for instant Bitcoin transactions</p>
+              <h3 className="text-lg font-semibold mb-2">Zero Gas Fees</h3>
+              <p className="text-gray-400 text-sm">StarkNet L2 = Ultra-low costs, maximum profits</p>
             </motion.div>
 
             <motion.div 
@@ -85,8 +85,8 @@ export default function LandingPage() {
               <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
                 <Lock className="w-6 h-6 text-green-500" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Self-Custody</h3>
-              <p className="text-gray-400 text-sm">Your keys, your crypto. Always.</p>
+              <h3 className="text-lg font-semibold mb-2">ChipiPay Secured</h3>
+              <p className="text-gray-400 text-sm">Non-custodial with social recovery</p>
             </motion.div>
           </div>
 
