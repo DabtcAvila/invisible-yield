@@ -61,7 +61,7 @@ export default function Dashboard() {
               <div className="bg-black/30 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingUp className="w-4 h-4 text-green-500" />
-                  <span className="text-sm text-gray-400">Today's Yield</span>
+                  <span className="text-sm text-gray-400">Today&apos;s Yield</span>
                 </div>
                 <p className="text-xl font-semibold">+{yieldEarned.toFixed(8)} BTC</p>
                 <p className="text-sm text-green-500">+{apy}% APY</p>
