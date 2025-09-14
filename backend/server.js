@@ -36,8 +36,8 @@ app.use(helmet({
 // CORS configuration
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-        ? ['https://invisible-yield.vercel.app', 'https://your-domain.com']
-        : ['http://localhost:3000', 'http://localhost:8080', 'http://127.0.0.1:8080'],
+        ? ['https://dabtcavila.github.io', 'https://invisible-yield.vercel.app', 'https://invisible-yield-api.vercel.app']
+        : ['http://localhost:3000', 'http://localhost:8080', 'http://127.0.0.1:8080', 'http://localhost:3002'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key']
