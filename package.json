@@ -1,0 +1,53 @@
+{
+  "name": "invisible-yield",
+  "version": "1.0.0",
+  "description": "![Live Demo](https://img.shields.io/badge/Demo-LIVE-success?style=for-the-badge) ![APY](https://img.shields.io/badge/APY-32.5%25-blue?style=for-the-badge) ![TVL](https://img.shields.io/badge/TVL-$12.5M-purple?style=for-the-badge)",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DabtcAvila/invisible-yield.git"
+  },
+  "keywords": [
+    "starknet",
+    "bitcoin",
+    "lightning",
+    "yield",
+    "defi",
+    "chipipay",
+    "atomiq",
+    "hackathon"
+  ],
+  "author": "Invisible Yield Team",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/DabtcAvila/invisible-yield/issues"
+  },
+  "homepage": "https://github.com/DabtcAvila/invisible-yield#readme",
+  "dependencies": {
+    "@atomiqlabs/sdk-lib": "github:atomiqlabs/atomiq-sdk-lib",
+    "@chipi-pay/chipi-sdk": "^3.2.2",
+    "@getalby/sdk": "^6.0.1",
+    "@webbtc/webln-types": "^3.0.0",
+    "axios": "^1.12.1",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "rate-limiter-flexible": "^7.3.1",
+    "sqlite3": "^5.1.7",
+    "starknet": "^6.24.1",
+    "webln": "^0.3.2",
+    "ws": "^8.18.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
