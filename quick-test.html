@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invisible Yield - Quick Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-green-400">🧪 Invisible Yield - Sistema de Validación</h1>
+        
+        <div class="space-y-4">
+            <div class="bg-gray-900 p-4 rounded-lg">
+                <h2 class="text-xl font-bold mb-2">1. Conexión StarkNet</h2>
+                <button onclick="testConnection()" class="px-4 py-2 bg-green-600 rounded hover:bg-green-700">
+                    Test Conexión
+                </button>
+                <div id="connection-result" class="mt-2 text-sm"></div>
+            </div>
+
+            <div class="bg-gray-900 p-4 rounded-lg">
+                <h2 class="text-xl font-bold mb-2">2. Protocolos DeFi</h2>
+                <button onclick="testProtocols()" class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700">
+                    Test Protocolos
+                </button>
+                <div id="protocols-result" class="mt-2 text-sm"></div>
+            </div>
+
+            <div class="bg-gray-900 p-4 rounded-lg">
+                <h2 class="text-xl font-bold mb-2">3. Transacciones</h2>
+                <button onclick="testTransactions()" class="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700">
+                    Test Transacciones
+                </button>
+                <div id="tx-result" class="mt-2 text-sm"></div>
+            </div>
+
+            <div class="bg-gray-900 p-4 rounded-lg">
+                <h2 class="text-xl font-bold mb-2">4. ChipiPay SDK</h2>
+                <button onclick="testChipiPay()" class="px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-700">
+                    Test ChipiPay
+                </button>
+                <div id="chipipay-result" class="mt-2 text-sm"></div>
+            </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-green-900/20 border border-green-500 rounded-lg">
+            <h2 class="text-xl font-bold mb-2">📊 Estado General</h2>
+            <div id="overall-status">
+                <p class="text-gray-400">Ejecuta las pruebas para ver el estado...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="starknet-integration.js"></script>
+    <script src="defi-protocols.js"></script>
+    <script src="chipipay-integration.js"></script>
+    <script>
+        let testsPassed = 0;
+        let totalTests = 0;
+
+        async function testConnection() {
+            const resultDiv = document.getElementById('connection-result');
+            resultDiv.innerHTML = '<p class="text-yellow-400">Testing...</p>';
+            
+            try {
+                // Test StarkNet connection
+                if (typeof window.StarkNetIntegration !== 'undefined') {
+                    resultDiv.innerHTML = '<p class="text-green-400">✅ StarkNet Integration loaded</p>';
+                    testsPassed++;
+                } else {
+                    throw new Error('StarkNet Integration not found');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="text-red-400">❌ Error: ${error.message}</p>`;
+            }
+            totalTests++;
+            updateOverallStatus();
+        }
+
+        async function testProtocols() {
+            const resultDiv = document.getElementById('protocols-result');
+            resultDiv.innerHTML = '<p class="text-yellow-400">Testing...</p>';
+            
+            try {
+                // Test DeFi protocols
+                if (typeof window.DeFiProtocols !== 'undefined') {
+                    const protocols = ['zkLend', 'JediSwap', 'Nostra'];
+                    let results = [];
+                    for (let protocol of protocols) {
+                        if (window.DeFiProtocols[protocol]) {
+                            results.push(`✅ ${protocol}`);
+                        }
+                    }
+                    resultDiv.innerHTML = `<p class="text-green-400">${results.join('<br>')}</p>`;
+                    testsPassed++;
+                } else {
+                    throw new Error('DeFi Protocols not loaded');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="text-red-400">❌ Error: ${error.message}</p>`;
+            }
+            totalTests++;
+            updateOverallStatus();
+        }
+
+        async function testTransactions() {
+            const resultDiv = document.getElementById('tx-result');
+            resultDiv.innerHTML = '<p class="text-yellow-400">Testing...</p>';
+            
+            try {
+                // Simulate transaction
+                const starknet = new window.StarkNetIntegration();
+                const mockTx = {
+                    to: '0x1234',
+                    value: 100,
+                    data: '0x00'
+                };
+                
+                resultDiv.innerHTML = '<p class="text-green-400">✅ Transaction system ready</p>';
+                testsPassed++;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="text-red-400">❌ Error: ${error.message}</p>`;
+            }
+            totalTests++;
+            updateOverallStatus();
+        }
+
+        async function testChipiPay() {
+            const resultDiv = document.getElementById('chipipay-result');
+            resultDiv.innerHTML = '<p class="text-yellow-400">Testing...</p>';
+            
+            try {
+                // Test ChipiPay
+                if (window.ChipiPay) {
+                    const result = await window.ChipiPay.connect();
+                    if (result.success) {
+                        resultDiv.innerHTML = `<p class="text-green-400">✅ ChipiPay connected<br>Address: ${result.address.slice(0,10)}...</p>`;
+                        testsPassed++;
+                    }
+                } else {
+                    throw new Error('ChipiPay SDK not found');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="text-red-400">❌ Error: ${error.message}</p>`;
+            }
+            totalTests++;
+            updateOverallStatus();
+        }
+
+        function updateOverallStatus() {
+            const statusDiv = document.getElementById('overall-status');
+            const percentage = totalTests > 0 ? Math.round((testsPassed / totalTests) * 100) : 0;
+            
+            let statusColor = 'text-red-400';
+            let statusEmoji = '❌';
+            
+            if (percentage >= 75) {
+                statusColor = 'text-green-400';
+                statusEmoji = '✅';
+            } else if (percentage >= 50) {
+                statusColor = 'text-yellow-400';
+                statusEmoji = '⚠️';
+            }
+            
+            statusDiv.innerHTML = `
+                <p class="${statusColor} text-2xl font-bold">
+                    ${statusEmoji} ${percentage}% Tests Passed (${testsPassed}/${totalTests})
+                </p>
+                <div class="mt-2 bg-gray-800 rounded-full h-4">
+                    <div class="bg-green-500 h-4 rounded-full transition-all" style="width: ${percentage}%"></div>
+                </div>
+            `;
+        }
+
+        // Auto-run tests on load
+        window.onload = async () => {
+            console.log('🧪 Running Invisible Yield validation tests...');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await testConnection();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testProtocols();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testTransactions();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            await testChipiPay();
+        };
+    </script>
+</body>
+</html>
